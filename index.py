@@ -1,56 +1,55 @@
 from socket import *
-import sys
+from sys import exit
 
-serverSocket = socket(AF_INET, SOCK_STREAM)
+SERVER_SOCKET = socket(AF_INET, SOCK_STREAM)
 SERVER_PORT = 8000
 SERVER_ADDRESS = "localhost"
-serverSocket.bind((SERVER_ADDRESS, SERVER_PORT))
-serverSocket.listen(1)
+SERVER_SOCKET.bind((SERVER_ADDRESS, SERVER_PORT))
+SERVER_SOCKET.listen(1)
 
 def create_http_header(code):
     header = ""
     if(code == 200):
         header = "HTTP/1.1 200 OK\n"
-
     elif(code == 404):
         header = "HTTP/1.1 404 Page not found\n"
-        
 
-    header += "Server: HawariValen's Web Server\n"
+    header += "Server: HawariValent's Web Server\n"
     header += "Connection: Alive\n\n"
     return header
 
+def main():
+    while True:
+        print("Ready to serve...")
+        connection_socket, address = SERVER_SOCKET.accept()
 
-while True:
-    print("Ready to serve...")
-    connectionSocket, addr = serverSocket.accept()
-    try:
-        message = connectionSocket.recv(2048).decode()
+        message = connection_socket.recv(2048).decode()
         print(message)
 
         filename = message.split()[1]
-        if filename == "/":
-             filename = "/index.html"
+        filename = "/index.html" if filename == "/" else filename
 
+        output_data, header = "", ""
+        try:
+            with open(filename[1:]) as f:
+                output_data = f.read()
+            header = create_http_header(200)
+        except IOError:
+            header = create_http_header(404)
+            with open("404.html") as f:
+                output_data = f.read()
 
-        f = open(filename[1:])    
-        outputdata = f.read()
-        f.close()
-
-        header = create_http_header(200)
-        print("HTTP Response:\n" + header)
-        connectionSocket.sendall(header.encode())
-        
-        print(outputdata)
-              
-        for i in range(0, len(outputdata)):
-            connectionSocket.send(outputdata[i].encode())
-        connectionSocket.send("\r\n".encode())
-        connectionSocket.close()
-    except IOError:
-        header = create_http_header(404)
         print("HTTP Response:\n" + header + "\n")
-        connectionSocket.sendall(header.encode())     
-        connectionSocket.close()
-    serverSocket.close()
-    sys.exit()
+        connection_socket.sendall(header.encode())     
+
+        for i in range(0, len(output_data)):
+            connection_socket.send(output_data[i].encode())
+        connection_socket.send("\r\n".encode())
+        connection_socket.close()
+
+    # Indent this to end connection immediately
+    SERVER_SOCKET.close()
+    exit(0)
+
+if __name__ == "__main__":
+    main()

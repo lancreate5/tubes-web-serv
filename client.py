@@ -13,8 +13,8 @@ def main():
     server_port = 8000
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
-    # Connect client to server. Handle the case where the 
-    # server is offline
+    # Menyambungkan client dengan server. Tangani kasus di mana
+    # server sedang berada di luar jaringan (offline)
     try:
         client_socket.connect((server_name, server_port))
     except ConnectionRefusedError:
@@ -22,7 +22,7 @@ def main():
         exit(0)
 
     while True:
-        # Ask user what file to be sent
+        # Minta nama dari file yang diinginkan oleh user
         filename = input("Masukkan nama file (contoh: index.html): ")
 
         # Buat dan kirimkan pesan HTTP GET ke server
@@ -32,11 +32,12 @@ def main():
         buffer = ""
         while True:
             message = client_socket.recv(1024)
-            if not(message): break
+            if not(message): 
+                break
             buffer += message.decode()
         print(buffer)
 
-        # Close connection
+        # Tutup koneksi saat ini
         client_socket.close()
         exit(0)
     
