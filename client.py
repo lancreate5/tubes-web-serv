@@ -39,7 +39,6 @@ def main():
 
         # Tutup koneksi saat ini
         client_socket.close()
-        exit(0)
     
 if __name__ == '__main__':
     main()

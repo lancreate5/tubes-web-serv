@@ -7,7 +7,10 @@ SERVER_ADDRESS = "localhost"
 SERVER_SOCKET.bind((SERVER_ADDRESS, SERVER_PORT))
 SERVER_SOCKET.listen(1)
 
+# Membuat header respon
 def create_http_header(code):
+    # Baris pertama header ditentukan berdasarkan kode
+    # status yang di-pass
     header = ""
     if(code == 200):
         header = "HTTP/1.1 200 OK\n"
@@ -28,7 +31,8 @@ def main():
 
         filename = message.split()[1]
         filename = "/index.html" if filename == "/" else filename
-
+        
+        # 
         output_data, header = "", ""
         try:
             with open(filename[1:]) as f:
@@ -41,7 +45,8 @@ def main():
 
         print("HTTP Response:\n" + header + "\n")
         connection_socket.sendall(header.encode())     
-
+        
+        print(output_data)
         for i in range(0, len(output_data)):
             connection_socket.send(output_data[i].encode())
         connection_socket.send("\r\n".encode())

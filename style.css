@@ -1,3 +1,29 @@
 body {
-    background-color: antiquewhite;
+    background: #2b2a33;
 }
+
+.wrap {
+	width: fit-content;
+    background: #42414d;
+	margin: 180px auto;
+	padding: 10px;
+	border-radius: 20px;
+}
+	.wrap * {
+		color: white;
+		text-align: center;
+		margin: 10px 50px;
+	}
+	.wrap h1 {
+		font-weight: bold;
+		font-size: 48px;
+	}
+
+	.swap-color {
+		margin: 10px 30%;
+		background: #2b2a33;
+		padding: 10px;
+
+		font-weight: bold;
+		border-radius: 20px;
+	}
