@@ -2,7 +2,7 @@
 let query = (tag) => document.querySelector(tag);
 let selectCls = (cls) => document.getElementsByClassName(cls)[0];
 let onClick = (obj, fn) => obj.addEventListener("click", fn);
-let onHover = (obj, fn) => obj.addEventListener("hover", fn);
+let onHover = (obj, fn) => obj.addEventListener("mouseover", fn);
 
 color = [
 	// wholeBG |   text   |   box    | Highlighting
@@ -27,8 +27,5 @@ onClick(button, () => {
 	for(let i = 0; i < content.length; i++) {
 		content[i].style.color = color[token][1];
 	}
-});
-
-onHover(button, () => {
 });
 

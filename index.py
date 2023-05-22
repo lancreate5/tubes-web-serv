@@ -26,13 +26,17 @@ def main():
         print("Ready to serve...")
         connection_socket, address = SERVER_SOCKET.accept()
 
+        # Terima pesan request yang dikirim oleh client
         message = connection_socket.recv(2048).decode()
         print(message)
-
+        
+        # Ubah nilai default file menjadi index.html
         filename = message.split()[1]
         filename = "/index.html" if filename == "/" else filename
         
-        # 
+        # Cari data yang diminta
+        # Jika ada, kirim pesan header 200 OK
+        # Jika tidak ada, kirim pesan header 404 Not Found
         output_data, header = "", ""
         try:
             with open(filename[1:]) as f:
@@ -43,9 +47,12 @@ def main():
             with open("404.html") as f:
                 output_data = f.read()
 
+        # Buat header berdasarkan hasil pencarian file
         print("HTTP Response:\n" + header + "\n")
         connection_socket.sendall(header.encode())     
         
+        # Cetak file yang ingin dikirim di konsol server
+        # Kirim file satu per satu
         print(output_data)
         for i in range(0, len(output_data)):
             connection_socket.send(output_data[i].encode())
